@@ -1,20 +1,40 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Chat.Desktop.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        
         x:Class="Chat.Desktop.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
+        
         Icon="/Assets/avalonia-logo.ico"
         Title="Chat.Desktop">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <Window.DataContext>
         <vm:MainWindowViewModel/>
-    </Design.DataContext>
+    </Window.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+    <Grid RowDefinitions="Auto, *, Auto">
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Row="0">
+            <Label Target="{Binding ElementName=InputUserName}"
+                   Content="Имя:"/>
+            <TextBox x:Name="InputUserName"
+                     Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                     IsEnabled="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            <Button Content="Сохранить"
+                    Command="{Binding SaveUserName}"/>
+        </StackPanel>
+        
+        <ListBox ItemsSource="{Binding Messages}"
+                 Grid.Row="1"/>
+        
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="2">
+            <Label Target="{Binding ElementName=InputMessage}"
+                   Content="Сообщение:"/>
+            <TextBox x:Name="InputMessage"
+                     Text="{Binding Message}"/>
+            <Button Content="Отправить"
+                    Command="{Binding SendMessage}"/>
+        </StackPanel>
+    </Grid>
 </Window>
